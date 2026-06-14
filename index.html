@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mithil Kareliya | Portfolio</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <!-- ==========================
+         NAVBAR
+    =========================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+
+            MK Portfolio
+
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="#home">Home</a>
+            </li>
+
+            <li>
+                <a href="#projects">
+                    Projects
+                </a>
+            </li>
+
+            <li>
+                <a href="#experience">
+                    Experience
+                </a>
+            </li>
+
+            <li>
+                <a href="#qualifications">
+                    Qualifications
+                </a>
+            </li>
+
+            <li>
+                <a href="#skills">
+                    Skills
+                </a>
+            </li>
+
+            <li>
+                <a href="#achievements">
+                    Achievements
+                </a>
+            </li>
+
+            <li>
+                <a href="#contact">
+                    Contact
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+    <!-- ==========================
+         HOME
+    =========================== -->
+
+    <section id="home" class="hero">
+
+        <div class="hero-overlay">
+
+            <div class="hero-content">
+
+                <img id="profilePhoto" src="" alt="Profile Photo">
+
+                <h1 id="name">
+
+                    Loading...
+
+                </h1>
+
+                <h2 id="designation">
+
+                    Loading...
+
+                </h2>
+
+                <p id="summary">
+
+                    Loading...
+
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a id="resumeLink" target="_blank">
+
+                        <button>
+
+                            Download Profile
+
+                        </button>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================
+         DASHBOARD
+    =========================== -->
+
+    <section class="stats">
+
+        <div class="card">
+
+            <h2 id="executedCount">
+
+                0
+
+            </h2>
+
+            <p>
+
+                Executed Projects
+
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2 id="plannedCount">
+
+                0
+
+            </h2>
+
+            <p>
+
+                Planned Projects
+
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2 id="executedValue">
+
+                ₹0
+
+            </h2>
+
+            <p>
+
+                Executed Value
+
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2 id="plannedValue">
+
+                ₹0
+
+            </h2>
+
+            <p>
+
+                Planned Value
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================
+         PROJECTS
+    =========================== -->
+
+    <section id="projects" class="section">
+
+        <h2 class="section-title">
+
+            Projects Executed
+
+        </h2>
+
+        <div class="slider-wrapper">
+
+            <button class="scroll-btn" onclick="scrollExecuted(-400)">
+
+                ❮
+
+            </button>
+
+            <div id="executedProjects" class="executed-slider">
+
+            </div>
+
+            <button class="scroll-btn" onclick="scrollExecuted(400)">
+
+                ❯
+
+            </button>
+
+        </div>
+
+        <br><br>
+
+        <h2 class="section-title">
+
+            Project Planning
+
+        </h2>
+
+        <input type="text" id="planningSearch" placeholder="Search Project..." class="search-box">
+
+        <div class="table-container">
+
+            <table id="planningTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Project Name
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Value
+                        </th>
+
+                        <th>
+                            Location
+                        </th>
+
+                        <th>
+                            Client
+                        </th>
+
+                        <th>
+                            Architect
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="planningProjects">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================
+         EXPERIENCE
+    =========================== -->
+
+    <section id="experience" class="section">
+
+        <h2 class="section-title">
+
+            Professional Experience
+
+        </h2>
+
+        <div id="experienceTimeline" class="timeline">
+
+        </div>
+
+    </section>
+
+    <!-- ==========================
+         QUALIFICATIONS
+    =========================== -->
+
+    <section id="qualifications" class="section">
+
+        <h2 class="section-title">
+
+            Professional Qualifications
+
+        </h2>
+
+        <div class="table-container">
+
+            <table id="qualificationTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Qualification
+                        </th>
+
+                        <th>
+                            Institute
+                        </th>
+
+                        <th>
+                            Year
+                        </th>
+
+                        <th>
+                            Result
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="qualificationContainer">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================
+         SKILLS
+    =========================== -->
+
+    <section id="skills" class="section">
+
+        <h2 class="section-title">
+
+            Skills
+
+        </h2>
+
+        <div id="skillsContainer">
+
+        </div>
+
+    </section>
+
+    <!-- ==========================
+         ACHIEVEMENTS
+    =========================== -->
+
+    <section id="achievements" class="section">
+
+        <h2 class="section-title">
+
+            Achievements
+
+        </h2>
+
+        <div id="achievementsContainer" class="expertise-grid">
+
+        </div>
+
+    </section>
+
+    <!-- ==========================
+         CONTACT
+    =========================== -->
+
+    <section id="contact" class="contact">
+
+        <img id="contactPhoto" src="" alt="Profile Photo">
+
+        <h2 id="contactName">
+
+            Loading...
+
+        </h2>
+
+        <h3 id="contactDesignation">
+
+            Loading...
+
+        </h3>
+
+        <p id="email">
+
+        </p>
+
+        <p id="mobile">
+
+        </p>
+
+        <p id="linkedin">
+
+        </p>
+
+        <br>
+
+        <a id="contactResume" target="_blank">
+
+            <button>
+
+                Download Profile
+
+            </button>
+
+        </a>
+
+    </section>
+
+    <!-- ==========================
+         FOOTER
+    =========================== -->
+
+    <footer>
+
+        © 2026 Mithil Kareliya Portfolio
+
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
