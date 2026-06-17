@@ -3,34 +3,42 @@
 
 <head>
 
+
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Mithil Kareliya | Portfolio</title>
+    <title>Mithil Kareliya Portfolio</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- PDF GENERATOR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
 
 <body>
 
-    <!-- ==========================
-         NAVBAR
-    =========================== -->
+    <!-- ==================================
+         NAVIGATION
+    ================================== -->
 
     <nav class="navbar">
 
         <div class="logo">
-
             MK Portfolio
-
         </div>
 
-        <ul class="nav-links">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            ☰
+        </div>
+
+        <ul class="nav-links" id="navLinks">
 
             <li>
-                <a href="#home">Home</a>
+                <a href="#home">
+                    Home
+                </a>
             </li>
 
             <li>
@@ -40,26 +48,8 @@
             </li>
 
             <li>
-                <a href="#experience">
-                    Experience
-                </a>
-            </li>
-
-            <li>
-                <a href="#qualifications">
-                    Qualifications
-                </a>
-            </li>
-
-            <li>
-                <a href="#skills">
-                    Skills
-                </a>
-            </li>
-
-            <li>
-                <a href="#achievements">
-                    Achievements
+                <a href="#companies">
+                    Companies
                 </a>
             </li>
 
@@ -69,13 +59,63 @@
                 </a>
             </li>
 
+            <li class="dropdown">
+
+                <a href="#">
+                    More ▼
+                </a>
+
+                <ul class="dropdown-content">
+
+                    <li>
+                        <a href="#experience">
+                            Experience
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#qualifications">
+                            Qualifications
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#roles">
+                            Roles
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#skills">
+                            Skills
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#technology">
+                            Technology
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#achievements">
+                            Achievements
+                        </a>
+                    </li>
+
+                </ul>
+
+            </li>
+
         </ul>
 
     </nav>
 
-    <!-- ==========================
+    <div id="mobileOverlay"></div>
+
+    <!-- ==================================
          HOME
-    =========================== -->
+    ================================== -->
 
     <section id="home" class="hero">
 
@@ -86,34 +126,22 @@
                 <img id="profilePhoto" src="" alt="Profile Photo">
 
                 <h1 id="name">
-
                     Loading...
-
                 </h1>
 
                 <h2 id="designation">
-
                     Loading...
-
                 </h2>
 
                 <p id="summary">
-
                     Loading...
-
                 </p>
 
                 <div class="hero-buttons">
 
-                    <a id="resumeLink" target="_blank">
-
-                        <button>
-
-                            Download Profile
-
-                        </button>
-
-                    </a>
+                    <button id="downloadProfileBtn">
+                        Download Profile
+                    </button>
 
                 </div>
 
@@ -123,24 +151,20 @@
 
     </section>
 
-    <!-- ==========================
+    <!-- ==================================
          DASHBOARD
-    =========================== -->
+    ================================== -->
 
     <section class="stats">
 
         <div class="card">
 
             <h2 id="executedCount">
-
                 0
-
             </h2>
 
             <p>
-
                 Executed Projects
-
             </p>
 
         </div>
@@ -148,15 +172,11 @@
         <div class="card">
 
             <h2 id="plannedCount">
-
                 0
-
             </h2>
 
             <p>
-
                 Planned Projects
-
             </p>
 
         </div>
@@ -164,15 +184,11 @@
         <div class="card">
 
             <h2 id="executedValue">
-
-                ₹0
-
+                ₹0 Cr
             </h2>
 
             <p>
-
                 Executed Value
-
             </p>
 
         </div>
@@ -180,39 +196,59 @@
         <div class="card">
 
             <h2 id="plannedValue">
-
-                ₹0
-
+                ₹0 Cr
             </h2>
 
             <p>
-
                 Planned Value
+            </p>
 
+        </div>
+
+        <div class="card">
+
+            <h2 id="experienceYears">
+                0+
+            </h2>
+
+            <p>
+                Years Experience
             </p>
 
         </div>
 
     </section>
 
-    <!-- ==========================
+    <!-- ==================================
+         COMPANIES
+    ================================== -->
+
+    <section id="companies" class="section">
+
+        <h2 class="section-title">
+            Companies Worked With
+        </h2>
+
+        <div id="workingCompaniesContainer" class="timeline">
+
+        </div>
+
+    </section>
+
+    <!-- ==================================
          PROJECTS
-    =========================== -->
+    ================================== -->
 
     <section id="projects" class="section">
 
         <h2 class="section-title">
-
             Projects Executed
-
         </h2>
 
         <div class="slider-wrapper">
 
             <button class="scroll-btn" onclick="scrollExecuted(-400)">
-
                 ❮
-
             </button>
 
             <div id="executedProjects" class="executed-slider">
@@ -220,9 +256,7 @@
             </div>
 
             <button class="scroll-btn" onclick="scrollExecuted(400)">
-
                 ❯
-
             </button>
 
         </div>
@@ -230,69 +264,94 @@
         <br><br>
 
         <h2 class="section-title">
-
             Project Planning
-
         </h2>
 
-        <input type="text" id="planningSearch" placeholder="Search Project..." class="search-box">
+        <!-- CATEGORY SLIDER -->
 
-        <div class="table-container">
+        <div class="planning-category-wrapper">
 
-            <table id="planningTable">
+            <button class="scroll-btn" onclick="scrollPlanning(-300)">
+                ❮
+            </button>
 
-                <thead>
+            <div id="planningCategoryContainer" class="planning-category-slider">
 
-                    <tr>
+            </div>
 
-                        <th>
-                            Project Name
-                        </th>
+            <button class="scroll-btn" onclick="scrollPlanning(300)">
+                ❯
+            </button>
 
-                        <th>
-                            Category
-                        </th>
+        </div>
 
-                        <th>
-                            Value
-                        </th>
+        <!-- PROJECT TABLE -->
 
-                        <th>
-                            Location
-                        </th>
+        <div id="planningProjectsSection" style="display:none;">
 
-                        <th>
-                            Client
-                        </th>
+            <br>
 
-                        <th>
-                            Architect
-                        </th>
+            <input type="text" id="planningSearch" class="search-box" placeholder="Search Project">
 
-                    </tr>
+            <div class="table-container">
 
-                </thead>
+                <table>
 
-                <tbody id="planningProjects">
+                    <thead>
 
-                </tbody>
+                        <tr>
 
-            </table>
+                            <th>
+                                Project Name
+                            </th>
+
+                            <th>
+                                Value
+                            </th>
+
+                            <th>
+                                Location
+                            </th>
+
+                            <th>
+                                Client
+                            </th>
+
+                            <th>
+                                Architect
+                            </th>
+
+                            <th>
+                                PMC
+                            </th>
+
+                            <th>
+                                Gallery
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="planningProjectsContainer">
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
 
     </section>
-
-    <!-- ==========================
-         EXPERIENCE
-    =========================== -->
+    <!-- ==================================
+                 EXPERIENCE
+            ================================== -->
 
     <section id="experience" class="section">
 
         <h2 class="section-title">
-
             Professional Experience
-
         </h2>
 
         <div id="experienceTimeline" class="timeline">
@@ -301,45 +360,35 @@
 
     </section>
 
-    <!-- ==========================
-         QUALIFICATIONS
-    =========================== -->
+    <!-- ==================================
+                 QUALIFICATIONS
+            ================================== -->
 
     <section id="qualifications" class="section">
 
         <h2 class="section-title">
-
             Professional Qualifications
-
         </h2>
 
         <div class="table-container">
 
-            <table id="qualificationTable">
+            <table>
 
                 <thead>
 
                     <tr>
 
-                        <th>
-                            Type
-                        </th>
+                        <th>Type</th>
 
-                        <th>
-                            Qualification
-                        </th>
+                        <th>Qualification</th>
 
-                        <th>
-                            Institute
-                        </th>
+                        <th>Institute</th>
 
-                        <th>
-                            Year
-                        </th>
+                        <th>Year</th>
 
-                        <th>
-                            Result
-                        </th>
+                        <th>Result</th>
+
+                        <th>Document</th>
 
                     </tr>
 
@@ -355,97 +404,237 @@
 
     </section>
 
-    <!-- ==========================
-         SKILLS
-    =========================== -->
+    <!-- ==================================
+                 ROLES & RESPONSIBILITIES
+            ================================== -->
+
+    <section id="roles" class="section">
+
+        <h2 class="section-title">
+            Roles & Responsibilities
+        </h2>
+
+        <div class="roles-section">
+
+            <h3 class="roles-heading">
+                Project Execution
+            </h3>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Role Category
+                            </th>
+
+                            <th>
+                                Responsibility
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="rolesExecution">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <br><br>
+
+            <h3 class="roles-heading">
+                Project Planning
+            </h3>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Role Category
+                            </th>
+
+                            <th>
+                                Responsibility
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="rolesPlanning">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==================================
+                 SKILLS
+            ================================== -->
 
     <section id="skills" class="section">
 
         <h2 class="section-title">
-
             Skills
-
         </h2>
 
-        <div id="skillsContainer">
+        <div id="skillsContainer" class="skills-grid">
 
         </div>
 
     </section>
 
-    <!-- ==========================
-         ACHIEVEMENTS
-    =========================== -->
+    <!-- ==================================
+                 TECHNOLOGY
+            ================================== -->
+
+    <section id="technology" class="section">
+
+        <h2 class="section-title">
+            Software & Applications
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Software / Applications
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="technologyContainer">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- ==================================
+                 ACHIEVEMENTS
+            ================================== -->
 
     <section id="achievements" class="section">
 
         <h2 class="section-title">
-
             Achievements
-
         </h2>
 
-        <div id="achievementsContainer" class="expertise-grid">
+        <div id="achievementsContainer" class="achievement-timeline">
 
         </div>
 
     </section>
 
-    <!-- ==========================
-         CONTACT
-    =========================== -->
+    <!-- ==================================
+                 CONTACT
+            ================================== -->
 
-    <section id="contact" class="contact">
+    <section id="contact" class="contact-section">
 
-        <img id="contactPhoto" src="" alt="Profile Photo">
+        <div class="contact-overlay">
 
-        <h2 id="contactName">
+            <img id="contactPhoto" src="" alt="Profile Photo">
 
-            Loading...
+            <h2 id="contactName">
+                Loading...
+            </h2>
 
-        </h2>
+            <h3 id="contactDesignation">
+                Loading...
+            </h3>
 
-        <h3 id="contactDesignation">
+            <div class="contact-details">
 
-            Loading...
+                <p id="email"></p>
 
-        </h3>
+                <p id="mobile"></p>
 
-        <p id="email">
+                <p id="linkedin"></p>
 
-        </p>
+                <p id="instagram"></p>
 
-        <p id="mobile">
+            </div>
 
-        </p>
-
-        <p id="linkedin">
-
-        </p>
-
-        <br>
-
-        <a id="contactResume" target="_blank">
-
-            <button>
-
+            <button id="contactDownloadBtn">
                 Download Profile
-
             </button>
 
-        </a>
+        </div>
 
     </section>
 
-    <!-- ==========================
-         FOOTER
-    =========================== -->
+    <!-- ==================================
+                 GALLERY MODAL
+            ================================== -->
 
-    <footer>
+    <div id="galleryModal" class="gallery-modal">
+
+        <div class="gallery-content">
+
+            <span class="close-gallery" onclick="closeGallery()">
+
+                &times;
+
+            </span>
+
+            <h2 id="galleryTitle">
+                Project Gallery
+            </h2>
+
+            <div id="galleryContainer" class="gallery-grid">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ==================================
+                 FOOTER
+            ================================== -->
+
+    <footer id="footerText">
 
         © 2026 Mithil Kareliya Portfolio
 
     </footer>
+
+    <!-- ==================================
+                 SCRIPT
+            ================================== -->
 
     <script src="script.js"></script>
 
