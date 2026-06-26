@@ -43,7 +43,11 @@ const ACHIEVEMENTS_URL =
     `https://opensheet.elk.sh/${SHEET_ID}/Achievements`;
 
 const SETTINGS_URL =
-    `https://opensheet.elk.sh/${SHEET_ID}/WebsiteSettings`;
+    `https://opensheet.elk.sh/${SHEET_ID}/Settings`;
+
+const IMAGE_PORTAL_URL =
+    `https://opensheet.elk.sh/${SHEET_ID}/ImagePortal`;
+
 
 /* ==================================
    GLOBAL DATA
@@ -51,9 +55,18 @@ const SETTINGS_URL =
 
 let profileData = {};
 let contactData = {};
+
 let allProjects = [];
+let allCompanies = [];
+let allQualifications = [];
+let allExperience = [];
+let allRoles = [];
+let allSkills = [];
+let allAchievements = [];
+
 let galleryData = [];
 let settingsData = {};
+let imagePortalData = [];
 
 /* ==================================
    INIT
@@ -87,6 +100,8 @@ document.addEventListener(
 
         loadGallery();
 
+        loadImagePortal();
+
         setupSearch();
 
         setupPDFButtons();
@@ -103,8 +118,13 @@ function loadSettings() {
     fetch(SETTINGS_URL)
 
         .then(r => r.json())
-
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
 
             data.forEach(row => {
 
@@ -157,13 +177,24 @@ function loadSettings() {
    PROFILE
 ================================== */
 
+/* ==================================
+   PROFILE
+================================== */
+
 function loadProfile() {
 
     fetch(PROFILE_URL)
 
         .then(r => r.json())
-
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
+
+            profileData = {};
 
             data.forEach(row => {
 
@@ -174,49 +205,74 @@ function loadProfile() {
 
             });
 
-            document.getElementById(
-                "name"
-            ).innerText =
+            const name =
                 profileData.Name || "";
 
-            document.getElementById(
-                "designation"
-            ).innerText =
+            const designation =
                 profileData.Designation || "";
 
-            document.getElementById(
-                "summary"
-            ).innerText =
+            const summary =
                 profileData.Summary || "";
 
-            document.getElementById(
-                "profilePhoto"
-            ).src =
+            const photo =
                 profileData.ProfilePhoto || "";
 
-            document.getElementById(
-                "contactPhoto"
-            ).src =
-                profileData.ProfilePhoto || "";
+            const homeBg =
+                profileData.HomeBackground || "";
 
-            document.getElementById(
-                "contactName"
-            ).innerText =
-                profileData.Name || "";
+            const nameBox =
+                document.getElementById("name");
 
-            document.getElementById(
-                "contactDesignation"
-            ).innerText =
-                profileData.Designation || "";
+            if (nameBox)
+                nameBox.innerText = name;
 
-            if (
-                profileData.HomeBackground
-            ) {
+            const designationBox =
+                document.getElementById("designation");
 
-                document.getElementById(
-                    "home"
-                ).style.backgroundImage =
-                    `url('${profileData.HomeBackground}')`;
+            if (designationBox)
+                designationBox.innerText = designation;
+
+            const summaryBox =
+                document.getElementById("summary");
+
+            if (summaryBox)
+                summaryBox.innerText = summary;
+
+            const profilePhoto =
+                document.getElementById("profilePhoto");
+
+            if (profilePhoto)
+                profilePhoto.src = photo;
+
+            const contactPhoto =
+                document.getElementById("contactPhoto");
+
+            if (contactPhoto)
+                contactPhoto.src = photo;
+
+            const contactName =
+                document.getElementById("contactName");
+
+            if (contactName)
+                contactName.innerText = name;
+
+            const contactDesignation =
+                document.getElementById("contactDesignation");
+
+            if (contactDesignation)
+                contactDesignation.innerText = designation;
+
+            if (homeBg) {
+
+                const home =
+                    document.getElementById("home");
+
+                if (home) {
+
+                    home.style.backgroundImage =
+                        `url('${homeBg}')`;
+
+                }
 
             }
 
@@ -231,6 +287,7 @@ function loadProfile() {
 
 }
 
+
 /* ==================================
    CONTACT
 ================================== */
@@ -240,8 +297,15 @@ function loadContact() {
     fetch(CONTACT_URL)
 
         .then(r => r.json())
-
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
+
+            contactData = {};
 
             data.forEach(row => {
 
@@ -252,38 +316,68 @@ function loadContact() {
 
             });
 
-            document.getElementById(
-                "email"
-            ).innerHTML =
-                "Email : " +
-                (contactData.Email || "");
+            const email =
+                contactData.Email || "";
 
-            document.getElementById(
-                "mobile"
-            ).innerHTML =
-                "Mobile : " +
-                (contactData.Mobile || "");
+            const mobile =
+                contactData.Mobile || "";
 
-            document.getElementById(
-                "linkedin"
-            ).innerHTML =
-                "LinkedIn : " +
-                (contactData.LinkedIn || "");
+            const linkedin =
+                contactData.LinkedIn || "";
 
-            document.getElementById(
-                "instagram"
-            ).innerHTML =
-                "Instagram : " +
-                (contactData.Instagram || "");
+            const instagram =
+                contactData.Insta ||
+                contactData.Instagram ||
+                "";
 
-            if (
-                contactData.BackgroundImage
-            ) {
+            const bgImage =
+                contactData.BackgroundImage || "";
 
-                document.getElementById(
-                    "contact"
-                ).style.backgroundImage =
-                    `url('${contactData.BackgroundImage}')`;
+            const emailBox =
+                document.getElementById("email");
+
+            if (emailBox)
+                emailBox.innerHTML =
+                    "Email : " + email;
+
+            const mobileBox =
+                document.getElementById("mobile");
+
+            if (mobileBox)
+                mobileBox.innerHTML =
+                    "Mobile : " + mobile;
+
+            const linkedinBox =
+                document.getElementById("linkedin");
+
+            if (linkedinBox)
+                linkedinBox.innerHTML =
+                    "LinkedIn : " + linkedin;
+
+            const instaBox =
+                document.getElementById("instagram");
+
+            if (instaBox && instagram) {
+
+                const username = instagram
+                    .replace("https://www.instagram.com/", "")
+                    .split("?")[0]
+                    .replace(/\/$/, "");
+
+                instaBox.innerHTML =
+                    `Instagram : <a href="${instagram}" target="_blank">@${username}</a>`;
+            }
+            if (bgImage) {
+
+                const contactSection =
+                    document.getElementById("contact");
+
+                if (contactSection) {
+
+                    contactSection.style.backgroundImage =
+                        `url('${bgImage}')`;
+
+                }
 
             }
 
@@ -323,10 +417,15 @@ function loadProjects() {
     fetch(PROJECTS_URL)
 
         .then(r => r.json())
-
         .then(data => {
 
-            allProjects = data;
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
+
+            allProjects = Array.isArray(data) ? data : [];
 
             loadDashboard();
 
@@ -356,6 +455,8 @@ function loadDashboard() {
 
     let executedValue = 0;
     let plannedValue = 0;
+
+    if (!Array.isArray(allProjects)) return;
 
     allProjects.forEach(project => {
 
@@ -419,6 +520,8 @@ function loadExecutedProjects() {
         );
 
     container.innerHTML = "";
+
+    if (!Array.isArray(allProjects)) return;
 
     allProjects.forEach(project => {
 
@@ -676,8 +779,13 @@ function loadGallery() {
     fetch(PROJECT_GALLERY_URL)
 
         .then(r => r.json())
-
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
 
             galleryData = data;
 
@@ -819,8 +927,15 @@ function loadCompanies() {
     fetch(COMPANIES_URL)
 
         .then(r => r.json())
-
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
+
+            allCompanies = data;
 
             const container =
                 document.getElementById(
@@ -831,74 +946,24 @@ function loadCompanies() {
 
             container.innerHTML = "";
 
-            const rows =
-                Array.isArray(data)
-                    ? data
-                    : (data.values || []);
-
-            rows.forEach((company, index) => {
-
-                let companyName = "";
-                let fromDate = "";
-                let toDate = "";
-                let remark = "";
-
-                // ARRAY FORMAT
-                if (Array.isArray(company)) {
-
-                    // Skip header row
-                    if (
-                        index === 0 &&
-                        company[0] === "Company Name"
-                    ) {
-                        return;
-                    }
-
-                    companyName =
-                        company[0] || "";
-
-                    fromDate =
-                        company[1] || "";
-
-                    toDate =
-                        company[2] || "Present";
-
-                    remark =
-                        company[3] || "";
-
-                }
-
-                // OBJECT FORMAT
-                else {
-
-                    companyName =
-                        company["Company Name"] || "";
-
-                    fromDate =
-                        company["From Date"] || "";
-
-                    toDate =
-                        company["To Date"] || "Present";
-
-                    remark =
-                        company["Remark"] || "";
-
-                }
+            data.forEach(company => {
 
                 container.innerHTML += `
 
 <div class="timeline-item">
 
     <div class="timeline-title">
-        ${companyName}
+        ${company["Company Name"] || ""}
     </div>
 
     <div class="timeline-subtitle">
-        ${fromDate} - ${toDate}
+        ${company["From Date"] || ""}
+        -
+        ${company["To Date"] || "Present"}
     </div>
 
     <div class="timeline-remark">
-        ${remark}
+        ${company.Remark || ""}
     </div>
 
 </div>
@@ -909,16 +974,15 @@ function loadCompanies() {
 
         })
 
-        .catch(err => {
-
-            console.error(
-                "Companies Error:",
+        .catch(err =>
+            console.log(
+                "Companies Error",
                 err
-            );
-
-        });
+            )
+        );
 
 }
+
 /* ==================================
    EXPERIENCE
 ================================== */
@@ -928,8 +992,15 @@ function loadExperience() {
     fetch(EXPERIENCE_URL)
 
         .then(r => r.json())
-
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
+
+            allExperience = data;
 
             const container =
                 document.getElementById(
@@ -947,12 +1018,12 @@ function loadExperience() {
 <div class="timeline-item">
 
     <div class="timeline-year">
-    ${exp.Year || ""}
-</div>
+        ${exp.Year || ""}
+    </div>
 
-<div class="timeline-position">
-    ${exp.Position || ""}
-</div>
+    <div class="timeline-position">
+        ${exp.Position || ""}
+    </div>
 
 </div>
 
@@ -972,6 +1043,10 @@ function loadExperience() {
         );
 
 }
+
+/* ==================================
+   EXPERIENCE CALCULATION
+================================== */
 
 function calculateExperience(data) {
 
@@ -995,7 +1070,9 @@ function calculateExperience(data) {
                 earliestYear === null ||
                 year < earliestYear
             ) {
+
                 earliestYear = year;
+
             }
 
         }
@@ -1008,8 +1085,7 @@ function calculateExperience(data) {
             new Date().getFullYear();
 
         const totalExperience =
-            currentYear -
-            earliestYear;
+            currentYear - earliestYear;
 
         const expBox =
             document.getElementById(
@@ -1036,8 +1112,15 @@ function loadQualifications() {
     fetch(QUALIFICATION_URL)
 
         .then(r => r.json())
-
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
+
+            allQualifications = data;
 
             const container =
                 document.getElementById(
@@ -1078,8 +1161,7 @@ ${q.Result || ""}
 
 ${q["Document Link"]
                         ? `<a href="${q["Document Link"]}" target="_blank">View</a>`
-                        : "-"
-                    }
+                        : "-"}
 
 </td>
 
@@ -1099,7 +1181,6 @@ ${q["Document Link"]
         );
 
 }
-
 /* ==================================
    ROLES & RESPONSIBILITIES
    EXCEL FORMAT
@@ -1112,6 +1193,14 @@ function loadRoles() {
     fetch(ROLES_URL)
         .then(r => r.json())
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
+            // Store data for PDF generation
+            allRoles = data;
 
             console.log("Roles Data:", data);
 
@@ -1160,6 +1249,7 @@ function loadRoles() {
         });
 
 }
+
 /* ==================================
    SKILLS
 ================================== */
@@ -1169,8 +1259,14 @@ function loadSkills() {
     fetch(SKILLS_URL)
 
         .then(r => r.json())
-
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
+            allSkills = Array.isArray(data) ? data : [];
 
             const container =
                 document.getElementById(
@@ -1184,9 +1280,7 @@ function loadSkills() {
             data.forEach(skill => {
 
                 const level =
-                    Number(
-                        skill.Level
-                    ) || 0;
+                    Number(skill.Level) || 0;
 
                 container.innerHTML += `
 
@@ -1230,7 +1324,6 @@ style="width:${level}%">
         );
 
 }
-
 /* ==================================
    TECHNOLOGY
 ================================== */
@@ -1240,8 +1333,13 @@ function loadTechnology() {
     fetch(TECHNOLOGY_URL)
 
         .then(r => r.json())
-
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
 
             const container =
                 document.getElementById(
@@ -1292,8 +1390,14 @@ function loadAchievements() {
     fetch(ACHIEVEMENTS_URL)
 
         .then(r => r.json())
-
         .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
+            allAchievements = data;
 
             const container =
                 document.getElementById(
@@ -1330,64 +1434,6 @@ ${item.Achievement || ""}
         );
 
 }
-
-/* ==================================
-   SEARCH
-================================== */
-
-function setupSearch() {
-
-    const search =
-        document.getElementById(
-            "planningSearch"
-        );
-
-    if (!search) return;
-
-    search.addEventListener(
-        "keyup",
-        function () {
-
-            const filter =
-                this.value.toLowerCase();
-
-            document
-                .querySelectorAll(
-                    "#planningProjectsContainer tr"
-                )
-                .forEach(row => {
-
-                    row.style.display =
-                        row.innerText
-                            .toLowerCase()
-                            .includes(filter)
-                            ? ""
-                            : "none";
-
-                });
-
-        }
-    );
-
-}
-
-/* ==================================
-   MOBILE MENU
-================================== */
-
-function toggleMenu() {
-
-    const nav =
-        document.getElementById(
-            "navLinks"
-        );
-
-    nav.classList.toggle(
-        "active"
-    );
-
-}
-
 /* ==================================
    CLOSE MENU AFTER CLICK
 ================================== */
@@ -1424,9 +1470,7 @@ document.addEventListener(
 
     }
 );
-/* ==================================
-   PDF DOWNLOAD
-================================== */
+
 /* ==================================
    PDF DOWNLOAD
 ================================== */
@@ -1448,28 +1492,157 @@ function setupPDFButtons() {
 
 /* ==================================
    PDF GENERATION FUNCTION
-   (Using html2pdf library)
 ================================== */
 
-function generatePortfolioPDF() {
+async function generatePortfolioPDF() {
 
-    const element = document.querySelector("#portfolio");
-    // 👆 change this ID if your main container is different
+    const { jsPDF } = window.jspdf;
 
-    if (!element) {
-        console.error("Portfolio container not found!");
-        return;
+    const doc = new jsPDF("p", "mm", "a4");
+
+    let y = 20;
+
+    doc.setFillColor(0, 24, 69);
+    doc.rect(0, 0, 210, 20, "F");
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20);
+
+    doc.text(
+        profileData.Name || "Portfolio",
+        15,
+        13
+    );
+
+    doc.setTextColor(0, 0, 0);
+
+    y = 35;
+
+    doc.setFontSize(16);
+    doc.text(
+        "Professional Snapshot",
+        15,
+        y
+    );
+
+    y += 10;
+
+    doc.setFontSize(11);
+
+    const summary =
+        doc.splitTextToSize(
+            profileData.Summary || "",
+            180
+        );
+
+    doc.text(
+        summary,
+        15,
+        y
+    );
+
+    y +=
+        summary.length * 5 +
+        10;
+
+    doc.setFontSize(14);
+
+    doc.text(
+        "Experience Timeline",
+        15,
+        y
+    );
+
+    y += 10;
+
+    allExperience.forEach(exp => {
+
+        doc.text(
+            `${exp.Year || ""} - ${exp.Position || ""}`,
+            20,
+            y
+        );
+
+        y += 6;
+
+    });
+
+    y += 10;
+
+    doc.text(
+        "Companies Worked With",
+        15,
+        y
+    );
+
+    y += 10;
+
+    allCompanies.forEach(company => {
+
+        doc.text(
+            company["Company Name"] || "",
+            20,
+            y
+        );
+
+        y += 6;
+
+    });
+
+    if (y > 250) {
+
+        doc.addPage();
+
+        y = 20;
+
     }
 
-    const options = {
-        margin: 0.5,
-        filename: "My_Portfolio.pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
-    };
+    doc.text(
+        "Core Competencies",
+        15,
+        y
+    );
 
-    html2pdf().set(options).from(element).save();
+    y += 10;
+
+    allSkills.forEach(skill => {
+
+        doc.text(
+            `${skill.Skill || ""} (${skill.Level || 0}%)`,
+            20,
+            y
+        );
+
+        y += 6;
+
+    });
+
+    y += 10;
+
+    doc.text(
+        "Achievements",
+        15,
+        y
+    );
+
+    y += 10;
+
+    allAchievements.forEach(item => {
+
+        doc.text(
+            item.Achievement || "",
+            20,
+            y
+        );
+
+        y += 6;
+
+    });
+
+    doc.save(
+        "Mithil_Kareliya_Portfolio.pdf"
+    );
+
 }
 
 
@@ -1477,10 +1650,179 @@ function generatePortfolioPDF() {
    INIT CALL
 ================================== */
 
-document.addEventListener("DOMContentLoaded", function () {
-    setupPDFButtons();
-});
 
+function loadImagePortal() {
+
+    fetch(IMAGE_PORTAL_URL)
+        .then(r => r.json())
+        .then(data => {
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid sheet data:", data);
+                return;
+            }
+
+
+            imagePortalData = data;
+
+            buildImagePortal();
+
+        })
+        .catch(err =>
+            console.log("Image Portal Error", err)
+        );
+}
+
+function buildImagePortal() {
+
+    const container =
+        document.getElementById("imagePortalContainer");
+
+    if (!container) return;
+
+    // Hide Close Button
+    document.getElementById("imagePortalClose").style.display = "none";
+
+    container.classList.remove("project-slider");
+    container.innerHTML = "";
+
+    const categories = {};
+
+    imagePortalData.forEach(item => {
+
+        const cat = item.Category || "Others";
+
+        if (!categories[cat]) {
+            categories[cat] = [];
+        }
+
+        categories[cat].push(item);
+
+    });
+
+    Object.keys(categories).forEach(cat => {
+
+        const images = categories[cat];
+
+        const randomImage =
+            images[Math.floor(Math.random() * images.length)].Image || "";
+
+        container.innerHTML += `
+
+        <div class="image-category-card"
+             onclick="openImageCategory('${cat.replace(/'/g, "\\'")}')">
+
+            <img src="${randomImage}" alt="${cat}">
+
+            <div class="project-info-min">
+                ${cat}
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+function openImageCategory(category) {
+
+    const container =
+        document.getElementById("imagePortalContainer");
+
+    if (!container) return;
+
+    // Show Close Button
+    document.getElementById("imagePortalClose").style.display = "flex";
+
+    container.innerHTML = "";
+
+    const projects = {};
+
+    imagePortalData
+        .filter(item =>
+            (item.Category || "").trim().toLowerCase() ===
+            category.trim().toLowerCase()
+        )
+        .forEach(item => {
+
+            const project =
+                item["Project Name"] || "Untitled";
+
+            if (!projects[project]) {
+                projects[project] = [];
+            }
+
+            projects[project].push(item);
+
+        });
+
+    Object.keys(projects).forEach(project => {
+
+        const coverImage =
+            projects[project][0].Image || "";
+
+        container.innerHTML += `
+
+        <div class="image-tile"
+             onclick="openImageGalleryPortal('${project.replace(/'/g, "\\'")}')">
+
+            <img src="${coverImage}" alt="${project}">
+
+            <div class="project-info-min">
+                ${project}
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+function openImageGalleryPortal(project) {
+
+    const modal =
+        document.getElementById("galleryModal");
+
+    const title =
+        document.getElementById("galleryTitle");
+
+    const container =
+        document.getElementById("galleryContainer");
+
+    title.innerText = project;
+
+    container.innerHTML = "";
+
+    imagePortalData
+        .filter(item =>
+            (item["Project Name"] || "").trim().toLowerCase() ===
+            project.trim().toLowerCase()
+        )
+        .forEach(item => {
+
+            container.innerHTML += `
+                <img src="${item.Image}" alt="${project}">
+            `;
+
+        });
+
+    modal.style.display = "block";
+
+}
+function scrollImagePortal(value) {
+
+    document
+        .getElementById("imagePortalContainer")
+        .scrollBy({
+            left: value,
+            behavior: "smooth"
+        });
+
+}
 /* ==================================
    END PDF MODULE
 ================================== */
@@ -1489,375 +1831,6 @@ function cleanText(str) {
         .replace(/\s+/g, " ")   // normalize ALL spaces
         .replace(/\s*\|\s*/g, " | ") // clean pipe formatting
         .trim();
-}
-async function generatePortfolioPDF() {
-
-    try {
-
-        if (
-            typeof window.jspdf ===
-            "undefined"
-        ) {
-
-            alert(
-                "jsPDF library missing.\nAdd jsPDF CDN in index.html"
-            );
-
-            return;
-
-        }
-
-        const { jsPDF } =
-            window.jspdf;
-
-        const doc =
-            new jsPDF(
-                "p",
-                "mm",
-                "a4"
-            );
-
-        let y = 20;
-
-        /* HEADER */
-
-        doc.setFillColor(
-            0,
-            24,
-            69
-        );
-
-        doc.rect(
-            0,
-            0,
-            210,
-            25,
-            "F"
-        );
-
-        doc.setTextColor(
-            255,
-            255,
-            255
-        );
-
-        doc.setFontSize(22);
-
-        doc.text(
-            profileData.Name || "",
-            15,
-            15
-        );
-
-        doc.setFontSize(11);
-
-        doc.text(
-            profileData.Designation || "",
-            15,
-            21
-        );
-
-        y = 35;
-
-        /* PROFILE */
-
-        doc.setTextColor(
-            0,
-            0,
-            0
-        );
-
-        doc.setFontSize(16);
-
-        doc.text(
-            "Professional Summary",
-            15,
-            y
-        );
-
-        y += 8;
-
-        doc.setFontSize(10);
-
-        const summary =
-            doc.splitTextToSize(
-                profileData.Summary || "",
-                180
-            );
-
-        doc.text(
-            summary,
-            15,
-            y
-        );
-
-        y +=
-            summary.length * 5 +
-            10;
-
-        /* CONTACT */
-
-        doc.setFontSize(16);
-
-        doc.text(
-            "Contact Information",
-            15,
-            y
-        );
-
-        y += 8;
-
-        doc.setFontSize(10);
-
-        doc.text(
-            "Email : " +
-            (contactData.Email || ""),
-            15,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            "Mobile : " +
-            (contactData.Mobile || ""),
-            15,
-            y
-        );
-
-        y += 6;
-
-        doc.text(
-            "LinkedIn : " +
-            (contactData.LinkedIn || ""),
-            15,
-            y
-        );
-
-        y += 10;
-
-        /* SKILLS */
-
-        doc.setFontSize(16);
-
-        doc.text(
-            "Skills",
-            15,
-            y
-        );
-
-        y += 8;
-
-        const skills =
-            await fetch(
-                SKILLS_URL
-            ).then(r =>
-                r.json()
-            );
-
-        doc.setFontSize(10);
-
-        skills.forEach(skill => {
-
-            doc.text(
-                `${skill.Skill} - ${skill.Level}%`,
-                20,
-                y
-            );
-
-            y += 6;
-
-        });
-
-        y += 5;
-
-        /* PAGE BREAK */
-
-        if (y > 250) {
-
-            doc.addPage();
-
-            y = 20;
-
-        }
-
-        /* EXPERIENCE */
-
-        doc.setFontSize(16);
-
-        doc.text(
-            "Professional Experience",
-            15,
-            y
-        );
-
-        y += 8;
-
-        const experience =
-            await fetch(
-                EXPERIENCE_URL
-            ).then(r =>
-                r.json()
-            );
-
-        doc.setFontSize(10);
-
-        experience.forEach(exp => {
-
-            doc.text(
-
-                `${exp["From Year"] || ""} - ${exp["To Year"] || ""}` +
-                ` | ${exp.Position || ""}` +
-                ` | ${exp.Company || ""}`,
-
-                20,
-                y
-
-            );
-
-            y += 6;
-
-            if (y > 280) {
-
-                doc.addPage();
-
-                y = 20;
-
-            }
-
-        });
-
-        y += 5;
-
-        /* QUALIFICATION */
-
-        doc.setFontSize(16);
-
-        doc.text(
-            "Qualifications",
-            15,
-            y
-        );
-
-        y += 8;
-
-        const qualifications =
-            await fetch(
-                QUALIFICATION_URL
-            ).then(r =>
-                r.json()
-            );
-
-        doc.setFontSize(10);
-
-        qualifications.forEach(q => {
-
-            doc.text(
-
-                `${q.Qualification || ""} | ${q.Institute || ""}`,
-
-                20,
-                y
-
-            );
-
-            y += 6;
-
-            if (y > 280) {
-
-                doc.addPage();
-
-                y = 20;
-
-            }
-
-        });
-
-        y += 5;
-
-        /* PROJECTS */
-
-        doc.setFontSize(16);
-
-        doc.text(
-            "Projects",
-            15,
-            y
-        );
-
-        y += 8;
-
-        doc.setFontSize(10);
-
-        allProjects.forEach(project => {
-
-            doc.text(
-
-                `${project["Project Name"] || ""}` +
-                ` | ${project.Category || ""}` +
-                ` | ${formatCr(project.Value)}`,
-
-                20,
-                y
-
-            );
-
-            y += 6;
-
-            if (y > 280) {
-
-                doc.addPage();
-
-                y = 20;
-
-            }
-
-        });
-
-        /* FOOTER */
-
-        const pages =
-            doc.internal
-                .getNumberOfPages();
-
-        for (
-            let i = 1;
-            i <= pages;
-            i++
-        ) {
-
-            doc.setPage(i);
-
-            doc.setFontSize(9);
-
-            doc.text(
-
-                "Generated from Live Portfolio Data",
-
-                15,
-
-                290
-
-            );
-
-        }
-
-        doc.save(
-            `${profileData.Name || "Portfolio"}_Profile.pdf`
-        );
-
-    }
-
-    catch (err) {
-
-        console.log(err);
-
-        alert(
-            "PDF Generation Failed"
-        );
-
-    }
-
 }
 
 /* ==================================
@@ -1875,7 +1848,7 @@ document.addEventListener(
             e.target.src =
                 "data:image/svg+xml;charset=UTF-8," +
                 encodeURIComponent(`
-                    <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
+            < svg xmlns = "http://www.w3.org/2000/svg" width = "600" height = "400" >
                         <rect width="100%" height="100%" fill="#f0f0f0"/>
                         <text x="50%" y="50%"
                               dominant-baseline="middle"
@@ -1884,8 +1857,8 @@ document.addEventListener(
                               font-size="24">
                             Image Unavailable
                         </text>
-                    </svg>
-                `);
+                    </svg >
+        `);
 
         }
 
@@ -1938,3 +1911,48 @@ window.onclick =
 /* ==================================
    END OF V3.1
 ================================== */
+document.addEventListener("DOMContentLoaded", function () {
+
+    const navLinks = document.getElementById("navLinks");
+    const moreBtn = document.getElementById("moreBtn");
+    const dropdown = document.querySelector(".dropdown");
+    const menu = document.getElementById("moreMenu");
+    const overlay = document.getElementById("mobileOverlay");
+
+    // safety check (prevents errors)
+    if (!moreBtn || !dropdown || !menu || !overlay) return;
+
+    // OPEN / CLOSE dropdown
+    moreBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        dropdown.classList.toggle("active");
+        overlay.classList.toggle("active");
+    });
+
+    // CLOSE when clicking outside (overlay)
+    overlay.addEventListener("click", function () {
+        dropdown.classList.remove("active");
+        overlay.classList.remove("active");
+    });
+
+    // CLOSE when clicking any menu item (IMPORTANT FIX)
+    menu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+            dropdown.classList.remove("active");
+            overlay.classList.remove("active");
+        });
+    });
+
+    // prevent menu from auto closing when clicking inside
+    menu.addEventListener("click", function (e) {
+        e.stopPropagation();
+    });
+
+    // mobile menu toggle (hamburger)
+    window.toggleMenu = function () {
+        navLinks.classList.toggle("active");
+    };
+
+});
